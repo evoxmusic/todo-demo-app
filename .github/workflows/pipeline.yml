@@ -2,6 +2,14 @@ name: Pipeline
 
 on:
   workflow_dispatch:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      QOVERY_CLI_ACCESS_TOKEN:
+        required: true
 
 jobs:
   run-unit-tests:
@@ -50,6 +58,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Create and deploy Qovery environment
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          # Download and install Qovery CLI
+          curl -s https://get.qovery.com | bash
+
+          qovery container deploy \
+            --organization ${{ vars.QOVERY_ORGANIZATION_NAME }} \
+            --project ${{ vars.QOVERY_PROJECT_NAME }} \
+            --environment ${{ vars.QOVERY_BLUEPRINT_ENVIRONMENT_NAME }} \
+            --container ${{ vars.QOVERY_APPLICATION_NAME }} \
+            --tag ${{ github.sha }} \
+            --watch
 
   run-e2e-tests:
     runs-on: ubuntu-latest
