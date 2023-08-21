@@ -67,10 +67,10 @@ jobs:
           curl -s https://get.qovery.com | bash
 
           qovery container deploy \
-            --organization ${{ vars.QOVERY_ORGANIZATION_NAME }} \
-            --project ${{ vars.QOVERY_PROJECT_NAME }} \
-            --environment ${{ vars.QOVERY_BLUEPRINT_ENVIRONMENT_NAME }} \
-            --container ${{ vars.QOVERY_APPLICATION_NAME }} \
+            --organization "${{ vars.QOVERY_ORGANIZATION_NAME }}" \
+            --project "${{ vars.QOVERY_PROJECT_NAME }}" \
+            --environment "${{ vars.QOVERY_BLUEPRINT_ENVIRONMENT_NAME }}" \
+            --container "${{ vars.QOVERY_APPLICATION_NAME }}" \
             --tag ${{ github.sha }} \
             --watch
 
