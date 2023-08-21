@@ -1,7 +1,0 @@
-name: Unit Tests
-
-jobs:
-  test:
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
