@@ -5,13 +5,27 @@ on:
     types: [ labeled, closed ]
 
 jobs:
+  init:
+    runs-on: ubuntu-latest
+    permissions:
+        pull-requests: write
+    steps:
+        - name: PR Comment with URL
+          uses: mshick/add-pr-comment@v2
+          with:
+            message: |
+                ## E2E Tests
+
+                To launch E2E tests add the `e2e` label to the Pull Request.
+                
+                --
+                Powered by [Qovery](https://www.qovery.com)!
   create-e2e-environment:
     if: ${{ github.event.label.name == 'e2e' }}
     runs-on: ubuntu-latest
+    permissions:
+        pull-requests: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Create and deploy Qovery environment
         env:
           QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
@@ -31,6 +45,8 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message: |
+            E2E Environment created!
+            --
             This is an **automatic** message by [Qovery](https://www.qovery.com)
 
   run-e2e-tests:
