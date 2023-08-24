@@ -34,6 +34,10 @@ jobs:
           # Download and install Qovery CLI
           curl -s https://get.qovery.com | bash
 
+          echo "Organization name: ${{ vars.QOVERY_ORGANIZATION_NAME }}"
+          echo "Project name: ${{ vars.QOVERY_PROJECT_NAME }}"
+          echo "Blueprint name: ${{ vars.QOVERY_BLUEPRINT_ENVIRONMENT_NAME }}"
+
           qovery container deploy \
             --organization "${{ vars.QOVERY_ORGANIZATION_NAME }}" \
             --project "${{ vars.QOVERY_PROJECT_NAME }}" \
