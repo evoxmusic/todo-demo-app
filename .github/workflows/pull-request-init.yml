@@ -1,0 +1,22 @@
+name: Pipeline init
+
+on:
+  pull_request:
+
+jobs:
+  init:
+    if: ${{ github.event.action == 'opened' }}
+    runs-on: ubuntu-latest
+    permissions:
+        pull-requests: write
+    steps:
+        - name: PR Comment with URL
+          uses: mshick/add-pr-comment@v2
+          with:
+            message: |
+                ## E2E Tests
+
+                To launch E2E tests add the `e2e` label to the Pull Request.
+                
+                --
+                Powered by [Qovery](https://www.qovery.com)!
