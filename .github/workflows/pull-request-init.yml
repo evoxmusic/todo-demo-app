@@ -1,4 +1,4 @@
-name: Pipeline init
+name: Pull Request init
 
 on:
   pull_request:
