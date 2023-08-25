@@ -14,9 +14,10 @@ jobs:
           uses: mshick/add-pr-comment@v2
           with:
             message: |
-                ## E2E Tests
-
-                To launch E2E tests add the `e2e` label to the Pull Request.
+              [![Qovery Preview](https://www.qovery.com/images/logo-white.svg)](https://www.qovery.com)
+              ---
+            
+              Add the label `e2e` to launch the E2E tests for this PR with Qovery.
                 
-                --
-                Powered by [Qovery](https://www.qovery.com)!
+              --
+              Powered by [Qovery](https://www.qovery.com)!

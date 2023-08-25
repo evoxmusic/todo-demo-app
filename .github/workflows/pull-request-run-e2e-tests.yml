@@ -52,13 +52,16 @@ jobs:
             --environment "$new_environment_name" \
             --markdown`
 
-          echo "qovery_status_markdown_output=$qovery_status_markdown_output" >> $GITHUB_OUTPUT
+
+          echo "QOVERY_STATUS_MARKDOWN_OUTPUT<<EOF" >> $GITHUB_OUTPUT
+          echo "$qovery_status_markdown_output" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: PR Comment with URL
         uses: mshick/add-pr-comment@v2
         with:
           message: |
-            echo "${{ steps.create-environment.outputs.qovery_status_markdown_output }}"
+            ${{ steps.create-environment.outputs.QOVERY_STATUS_MARKDOWN_OUTPUT }}
 
   run-e2e-tests:
     if: ${{ github.event.label.name == 'e2e' }}
