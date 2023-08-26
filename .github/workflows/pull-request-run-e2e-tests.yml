@@ -52,6 +52,13 @@ jobs:
             --environment "$new_environment_name" \
             --markdown`
 
+          api_domain=`qovery container domain list \
+            --organization "${{ vars.QOVERY_ORGANIZATION_NAME }}" \
+            --project "${{ vars.QOVERY_PROJECT_NAME }}" \
+            --environment "$new_environment_name" \
+            --container "${{ vars.QOVERY_APPLICATION_NAME }}" | grep "BUILT_IN_DOMAIN" | head -1 | awk '{print $5}'`
+
+          echo "QOVERY_API_URL=https://$api_domain" >> $GITHUB_OUTPUT
 
           echo "QOVERY_STATUS_MARKDOWN_OUTPUT<<EOF" >> $GITHUB_OUTPUT
           echo "$qovery_status_markdown_output" >> $GITHUB_OUTPUT
@@ -70,8 +77,34 @@ jobs:
     permissions:
       pull-requests: write
     steps:      
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - id: run-e2e
+        name: Run E2E tests
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+          e2e_report=`k6 -e API_HOST=${{ env.QOVERY_API_URL }} run k6-script.js`
+
+          echo "E2E_REPORT<<EOF" >> $GITHUB_OUTPUT
+          echo "$e2e_report" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Display E2E Report
         uses: mshick/add-pr-comment@v2
         with:
           message: |
-            this is a E2E report
+            E2E Tests Report
+
+            --
+
+            ```
+            ${{ steps.run-e2e.outputs.E2E_REPORT }}
+            ```
