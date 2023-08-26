@@ -2,7 +2,7 @@ name: PR Run E2E Tests
 
 on:
   pull_request:
-    types: [ labeled, closed ]
+    types: [ labeled ]
 
 jobs:
   create-e2e-environment:
@@ -67,36 +67,11 @@ jobs:
     if: ${{ github.event.label.name == 'e2e' }}
     runs-on: ubuntu-latest
     needs: create-e2e-environment
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-  delete-e2e-environment:
-    if: ${{ github.event.label.name == 'e2e' }}
-    runs-on: ubuntu-latest
-    needs: run-e2e-tests
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - id: delete-environment
-        name: Delete Qovery E2E environment
-        env:
-          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
-        run: |
-          # Download and install Qovery CLI
-          curl -s https://get.qovery.com | bash
-
-          echo "Organization name: ${{ vars.QOVERY_ORGANIZATION_NAME }}"
-          echo "Project name: ${{ vars.QOVERY_PROJECT_NAME }}"
-          echo "Blueprint name: ${{ vars.QOVERY_BLUEPRINT_ENVIRONMENT_NAME }}"
-          
-          new_environment_name="${GITHUB_HEAD_REF}"
-
-          echo "Let's delete '$new_environment_name' environment and release its resources"
-
-          qovery environment delete \
-            --organization "${{ vars.QOVERY_ORGANIZATION_NAME }}" \
-            --project "${{ vars.QOVERY_PROJECT_NAME }}" \
-            --environment "$new_environment_name" \
-            -w
+    permissions:
+      pull-requests: write
+    steps:      
+      - name: Display E2E Report
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            this is a E2E report
