@@ -52,9 +52,9 @@ jobs:
             --environment "$new_environment_name" \
             --markdown`
 
-          echo "QOVERY_STATUS_MARKDOWN_OUTPUT<<EOF" >> $GITHUB_OUTPUT
-          echo "$qovery_status_markdown_output" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "QOVERY_STATUS_MARKDOWN_OUTPUT<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$qovery_status_markdown_output" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
           
           api_domain=`qovery container domain list \
             --organization "${{ vars.QOVERY_ORGANIZATION_NAME }}" \
@@ -64,7 +64,7 @@ jobs:
           
           echo "api_domain: $api_domain"
           
-          echo "QOVERY_API_URL=https://$api_domain" >> $GITHUB_OUTPUT
+          echo "QOVERY_API_URL=https://$api_domain" >> "$GITHUB_OUTPUT"
 
       - name: PR Comment with URL
         uses: mshick/add-pr-comment@v2
