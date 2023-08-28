@@ -91,7 +91,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6
 
-          e2e_report=`k6 -e API_HOST=${{ steps.create-environment.outputs.QOVERY_API_URL }} run e2e/e2e.js`
+          e2e_report=`k6 -e API_HOST=${{ needs.create-e2e-environment.outputs.QOVERY_API_URL }} run e2e/e2e.js`
 
           echo "E2E_REPORT<<EOF" >> $GITHUB_OUTPUT
           echo "$e2e_report" >> $GITHUB_OUTPUT
