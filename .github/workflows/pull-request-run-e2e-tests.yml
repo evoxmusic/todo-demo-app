@@ -59,6 +59,7 @@ jobs:
       - name: PR Comment with URL
         uses: mshick/add-pr-comment@v2
         with:
+          message-id: qovery-e2e-environment-status
           message: |
             ${{ steps.create-environment.outputs.QOVERY_STATUS_MARKDOWN_OUTPUT }}
 
@@ -99,7 +100,7 @@ jobs:
           api_host="https://$api_domain"
           echo "API_HOST: $api_host"
 
-          e2e_report=`k6 -e API_HOST=$api_host run e2e/e2e.js`
+          e2e_report=`k6 --no-color -q -e API_HOST=$api_host run e2e/e2e.js`
 
           echo "E2E_REPORT<<EOF" >> $GITHUB_OUTPUT
           echo "$e2e_report" >> $GITHUB_OUTPUT
@@ -108,6 +109,7 @@ jobs:
       - name: Display E2E Report
         uses: mshick/add-pr-comment@v2
         with:
+          message-id: e2e-report
           message: |
             E2E Tests Report
 

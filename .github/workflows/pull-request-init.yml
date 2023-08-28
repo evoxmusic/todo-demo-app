@@ -13,6 +13,7 @@ jobs:
       - name: PR Comment with URL
         uses: mshick/add-pr-comment@v2
         with:
+          message-id: e2e-init-message
           message: |
             [![Qovery Preview](https://www.qovery.com/images/logo-white.svg)](https://www.qovery.com)
             ---
