@@ -92,7 +92,7 @@ jobs:
             --organization "${{ vars.QOVERY_ORGANIZATION_NAME }}" \
             --project "${{ vars.QOVERY_PROJECT_NAME }}" \
             --environment "$new_environment_name" \
-            --container "${{ vars.QOVERY_APPLICATION_NAME }}" | grep "BUILT_IN_DOMAIN" | head -1 | awk '{print $5}'`
+            --container "${{ vars.QOVERY_APPLICATION_NAME }}" | grep "BUILT_IN_DOMAIN" | head -1 | awk '{print $5}' | sed -e 's/\x1b\[[0-9;]*m//g'`
           
           echo "api_domain: $api_domain"
           
