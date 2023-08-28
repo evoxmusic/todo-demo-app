@@ -63,10 +63,8 @@ jobs:
             --container "${{ vars.QOVERY_APPLICATION_NAME }}" | grep "BUILT_IN_DOMAIN" | head -1 | awk '{print $5}'`
           
           echo "api_domain: $api_domain"
-
-          echo "QOVERY_API_URL<<EOF" >> $GITHUB_OUTPUT
-          echo "https://$api_domain" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "QOVERY_API_URL=https://$api_domain" >> $GITHUB_OUTPUT
 
       - name: PR Comment with URL
         uses: mshick/add-pr-comment@v2
