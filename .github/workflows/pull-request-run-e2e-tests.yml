@@ -9,7 +9,7 @@ jobs:
     if: ${{ github.event.label.name == 'e2e' }}
     runs-on: ubuntu-latest
     permissions:
-        pull-requests: write
+      pull-requests: write
     steps:
       - id: create-environment
         name: Create and deploy Qovery E2E environment
@@ -76,7 +76,7 @@ jobs:
     needs: create-e2e-environment
     permissions:
       pull-requests: write
-    steps:      
+    steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -91,7 +91,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6
 
-          e2e_report=`k6 -e API_HOST=${{ env.QOVERY_API_URL }} run k6-script.js`
+          e2e_report=`k6 -e API_HOST=${{ env.QOVERY_API_URL }} run e2e/e2e.js`
 
           echo "E2E_REPORT<<EOF" >> $GITHUB_OUTPUT
           echo "$e2e_report" >> $GITHUB_OUTPUT
