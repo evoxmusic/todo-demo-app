@@ -61,6 +61,8 @@ jobs:
             --project "${{ vars.QOVERY_PROJECT_NAME }}" \
             --environment "$new_environment_name" \
             --container "${{ vars.QOVERY_APPLICATION_NAME }}" | grep "BUILT_IN_DOMAIN" | head -1 | awk '{print $5}'`
+          
+          echo "api_domain: $api_domain"
 
           echo "QOVERY_API_URL<<EOF" >> $GITHUB_OUTPUT
           echo "https://$api_domain" >> $GITHUB_OUTPUT
@@ -92,6 +94,8 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
           sudo apt-get install k6
+          
+          echo "API_HOST: ${{ needs.create-e2e-environment.outputs.QOVERY_API_URL }}"
 
           e2e_report=`k6 -e API_HOST=${{ needs.create-e2e-environment.outputs.QOVERY_API_URL }} run e2e/e2e.js`
 
