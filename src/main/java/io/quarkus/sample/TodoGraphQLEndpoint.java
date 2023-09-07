@@ -21,6 +21,7 @@ public class TodoGraphQLEndpoint {
     @Query
     @Description("Get a specific todo by id")
     public Todo getTodo(Long id) {
+        
         return Todo.findById(id);
     }
 
